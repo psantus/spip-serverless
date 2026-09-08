@@ -43,6 +43,7 @@ eval "$(AWS_PROFILE=$PROFILE aws configure export-credentials --format env)"
 docker run --rm \
   -e SPIP_DSQL_CLUSTER=$CLUSTER \
   -e SPIP_TABLE_PREFIX=spip \
+  -e SPIP_PUBLIC_URL=https://<cloudfront-or-custom-domain> \
   -e SPIP_CLES="$SPIP_CLES" \
   -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN \
   -e AWS_REGION=$REGION \
