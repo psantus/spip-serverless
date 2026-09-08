@@ -29,6 +29,12 @@ concurrency:
   group: deploy-${{ github.ref_name }}
   cancel-in-progress: false
 
+# Opt every JavaScript action into Node.js 24 now (GitHub forces it by June 2026).
+# Silences the Node 20 deprecation warnings for actions that don't yet ship a
+# Node 24 major (docker/*, setup-terraform, setup-php, cache, aws-actions/*).
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   deploy:
     runs-on: ubuntu-24.04-arm
@@ -45,7 +51,7 @@ jobs:
       AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
       ECR_REPO: spip-serverless
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Read pinned SPIP version + ADOT layer
         run: |

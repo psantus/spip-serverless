@@ -9,11 +9,17 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Opt every JavaScript action into Node.js 24 now (GitHub forces it by June 2026).
+# Silences the Node 20 deprecation warnings for actions that don't yet ship a
+# Node 24 major (docker/*, setup-terraform, setup-php).
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: hashicorp/setup-terraform@v3
       - name: fmt
         run: terraform fmt -check -recursive iac/
@@ -31,7 +37,7 @@ jobs:
   php-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
@@ -44,14 +50,14 @@ jobs:
   shell-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: bash -n on scripts
         run: for s in spip/scripts/*.sh; do bash -n "$s"; done
 
   docker-build:
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: docker/setup-buildx-action@v3
       - name: Read pinned SPIP version
         run: echo "SPIP_VERSION=$(cat spip/SPIP_VERSION)" >> "$GITHUB_ENV"
