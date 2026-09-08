@@ -3,15 +3,9 @@
     categorie="communication"
     version="1.0.0"
     etat="stable"
-    compatibilite="[4.0.0;4.*]"
-    logo=""
+    compatibilite="[4.0.0;4.4.*]"
 >
     <nom>Amazon SES mail</nom>
     <auteur>spip-serverless</auteur>
     <licence>MIT</licence>
-    <description>
-        Route les emails transactionnels de SPIP via Amazon SES (mail() ne fonctionne pas
-        sur Lambda/Bref). OPTIONNEL : inactif tant que SES_FROM n'est pas défini — retombe
-        alors sur le mail natif. Fournit la surcharge inc/envoyer_mail.php.
-    </description>
 </paquet>
