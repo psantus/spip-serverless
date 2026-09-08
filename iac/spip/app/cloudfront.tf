@@ -34,7 +34,7 @@ resource "aws_cloudfront_distribution" "spip" {
   origin {
     domain_name = "${aws_api_gateway_rest_api.spip.id}.execute-api.${var.aws_region}.amazonaws.com"
     origin_id   = "apigw"
-    origin_path = "/${aws_api_gateway_stage.spip.stage_name}"
+    origin_path = "/${local.stage_name}"
     custom_origin_config {
       http_port              = 80
       https_port             = 443

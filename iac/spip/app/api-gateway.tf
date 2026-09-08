@@ -74,7 +74,7 @@ resource "aws_cloudwatch_log_group" "apigw_access" {
 resource "aws_api_gateway_stage" "spip" {
   rest_api_id   = aws_api_gateway_rest_api.spip.id
   deployment_id = aws_api_gateway_deployment.spip.id
-  stage_name    = "live"
+  stage_name    = local.stage_name
 
   xray_tracing_enabled = true
 
