@@ -48,7 +48,7 @@ docker run --rm \
   -e AWS_REGION=$REGION \
   --entrypoint php \
   <account>.dkr.ecr.$REGION.amazonaws.com/spip-serverless:<tag> \
-  php -d auto_prepend_file= /var/task/scripts/bootstrap-db.php \
+  -d auto_prepend_file= /var/task/scripts/bootstrap-db.php \
     --admin-login=admin --admin-email=you@example.org --admin-pass='<pass>'
 ```
 

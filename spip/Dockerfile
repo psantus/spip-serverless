@@ -128,7 +128,6 @@ COPY --from=vendors /app/ /var/task/
 # Overlays that replace core files (DSQL connection, install wizard, options, router).
 COPY spip/overlay/ecrire/exec/install.php /var/task/ecrire/exec/install.php
 COPY spip/overlay/ecrire/req/dsql.php /var/task/ecrire/req/dsql.php
-COPY spip/overlay/ecrire/src/Chiffrer/SpipCles.php /var/task/ecrire/src/Chiffrer/SpipCles.php
 COPY spip/overlay/config/connect.php /var/task/config/connect.php
 COPY spip/overlay/config/mes_options_lambda.php /var/task/config/mes_options.php
 COPY spip/overlay/php/prepend.php /var/task/php/prepend.php

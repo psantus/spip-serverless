@@ -42,9 +42,13 @@ skeletons. Default region: **eu-west-3** (Paris) 🇫🇷.
 
 - An AWS account with permission to create the resources above (Aurora DSQL is available
   in eu-west-3 among others).
-- Docker (buildx, ARM64), Terraform ≥ 1.14, the AWS CLI, and `make`.
-- Aurora DSQL, Bedrock etc. are **not** used by the bare platform — only DSQL, S3,
-  DynamoDB, Lambda, API Gateway, CloudFront, ECR, SSM.
+- **Docker** installed and **running** (buildx; the image is `linux/arm64`).
+- **Terraform ≥ 1.14** (an older 1.5.x on your PATH will fail the `required_version` check).
+- **AWS CLI v2** with an **active session** for your profile — `aws sso login --profile <p>`
+  or exported credentials. The principal must be able to create DSQL, S3, ECR, DynamoDB,
+  SSM, Lambda, API Gateway, CloudFront and IAM roles.
+- **make**, `git`, `curl`, `unzip`.
+- Aurora DSQL, Bedrock etc. beyond the above are **not** used by the bare platform.
 
 ## Quick start
 
@@ -52,23 +56,28 @@ skeletons. Default region: **eu-west-3** (Paris) 🇫🇷.
 # 0. pick an environment name + AWS profile
 export ENV=test AWS_PROFILE=your-profile
 
-# 1. create per-env config from the template
-for s in static app; do cp -r iac/spip/$s/var/example iac/spip/$s/var/$ENV; done
-#    then edit iac/spip/*/var/$ENV/{values.tfvars,backend.tfbackend}
-#    (state bucket, region, optional domain)
+# 1. create the S3 bucket that will hold Terraform state (once per account)
+aws s3 mb s3://your-tfstate-bucket --region eu-west-3
 
-# 2. base infra (DSQL, S3, ECR, DynamoDB, SSM)
+# 2. create per-env config from the template
+for s in static app; do cp -r iac/spip/$s/var/example iac/spip/$s/var/$ENV; done
+#    then edit iac/spip/*/var/$ENV/{values.tfvars,backend.tfbackend}:
+#    set the state bucket (both backend.tfbackend + app's static_state_bucket),
+#    region, and optionally a custom domain.
+
+# 3. base infra (DSQL, S3, ECR, DynamoDB, SSM)
 make deploy-static ENV=$ENV
 
-# 3. fill the SPIP key material in SSM  → see docs/db-bootstrap.md
+# 4. fill the SPIP key material in SSM  → see docs/db-bootstrap.md
 
-# 4. build + push image, sync assets, deploy the app stack
+# 5. build + push image, sync assets, deploy the app stack
 make deploy ENV=$ENV
 
-# 5. create the schema + admin author  → see docs/db-bootstrap.md
+# 6. create the schema + admin author  → see docs/db-bootstrap.md
 ```
 
-`make deploy` prints the CloudFront URL; the admin is at `/ecrire`.
+`make deploy` prints the CloudFront URL; the admin is at `/ecrire`. Verified end-to-end
+on a fresh AWS account (eu-west-3): CloudFront serves the public site and `/spip.php?page=login`.
 
 ## Working with SPIP core locally
 

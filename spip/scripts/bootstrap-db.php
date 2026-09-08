@@ -173,6 +173,10 @@ if (function_exists('lire_config') && lire_config('plugin_installes', null) === 
     _out('plugin_installes', 'seeded empty (SVP guard)');
 }
 if (function_exists('plugin_installes_meta')) {
+    // plugin_installes_meta() runs plugin install boxes that call template helpers
+    // like typo()/propre(); load them (not auto-loaded in this CLI context).
+    include_spip('inc/texte');
+    include_spip('inc/filtres');
     // plugin_installes_meta() may echo install boxes; capture and drop that output.
     ob_start();
     plugin_installes_meta();
