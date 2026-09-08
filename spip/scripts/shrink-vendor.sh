@@ -13,8 +13,9 @@ fi
 
 BEFORE=$(du -sm "$VENDOR_DIR/aws" | cut -f1)
 
-# Services to keep (dsql + its dependencies: sts for credentials)
-KEEP_SERVICES="bedrock-agent-runtime|bedrock-runtime|bedrockagentruntime|bedrockruntime|cloudfront|dsql|dynamodb|email|lambda|s3|ses|ssm|streams.dynamodb|sts|translate"
+# Services to keep: what the bare platform uses (dsql, dynamodb, s3, ssm, sts for
+# credentials) + SES ("email" is SES's SDK data-dir name) for optional transactional mail.
+KEEP_SERVICES="dsql|dynamodb|email|s3|ses|ssm|sts"
 
 # Remove unused service data directories
 for dir in "$SDK_DATA"/*/; do
@@ -29,7 +30,7 @@ for dir in "$SDK_SRC"/*/; do
     dirname=$(basename "$dir")
     # Skip non-service directories
     case "$dirname" in
-        data|Api|Arn|ClientSideMonitoring|Credentials|Crypto|DefaultsMode|Endpoint*|Exception|Handler*|Multipart|Retry|Signature|Token|BedrockAgentRuntime|BedrockRuntime|CloudFront|DSQL|DynamoDb|Lambda|S3|Ses|Ssm|Sts|Translate) continue ;;
+        data|Api|Arn|ClientSideMonitoring|Credentials|Crypto|DefaultsMode|Endpoint*|Exception|Handler*|Multipart|Retry|Signature|Token|DSQL|DynamoDb|S3|Ses|Ssm|Sts) continue ;;
     esac
     # If it's a service directory (has a Client.php), remove if not needed
     if [ -f "$dir/${dirname}Client.php" ]; then
