@@ -19,6 +19,11 @@ locals {
   account_id = data.aws_caller_identity.current.account_id
   region     = var.aws_region
 
+  # Constant (not derived from the stage resource) so CloudFront's origin_path can use
+  # it without depending on the stage → deployment → integration → lambda chain, which
+  # would form a cycle with the Lambda env var CF_DISTRIBUTION_ID.
+  stage_name = "live"
+
   dsql_endpoint      = data.terraform_remote_state.static.outputs.dsql_endpoint
   dsql_arn           = data.terraform_remote_state.static.outputs.dsql_arn
   s3_bucket          = data.terraform_remote_state.static.outputs.s3_assets_bucket

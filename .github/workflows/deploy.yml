@@ -32,6 +32,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-24.04-arm
+    # Skips (stays green) until the target GitHub Environment defines AWS_ACCOUNT_ID.
+    # See docs/environments.md for the required environment variables.
+    if: ${{ vars.AWS_ACCOUNT_ID != '' }}
     environment: ${{ github.event.inputs.environment || 'test' }}
     permissions:
       contents: read
