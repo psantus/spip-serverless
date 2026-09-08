@@ -1,0 +1,12 @@
+<paquet
+    prefix="sessions_dynamodb"
+    categorie="outil"
+    version="1.0.0"
+    etat="stable"
+    compatibilite="[4.0.0;4.4.*]"
+    logo=""
+>
+    <nom>Sessions DynamoDB</nom>
+    <auteur>TerraCloud</auteur>
+    <licence>GPL</licence>
+</paquet>

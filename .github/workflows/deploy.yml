@@ -1,0 +1,116 @@
+name: Deploy SPIP
+
+# Deploys the SPIP image + Terraform stacks to one environment.
+#
+# Per-environment configuration lives in GitHub → Settings → Environments.
+# For each environment (e.g. "test", "prod") set these Environment *variables*:
+#   AWS_ACCOUNT_ID   e.g. 123456789012
+#   AWS_REGION       e.g. us-east-1
+#   CI_ROLE_NAME     IAM role to assume via OIDC (default: ci-github-actions)
+# and commit the matching iac/spip/{static,app}/var/<env>/ files
+# (copy them from var/example/).
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy
+        type: string
+        default: test
+  push:
+    branches: [main]
+    paths:
+      - 'spip/**'
+      - 'iac/spip/**'
+      - 'Makefile'
+      - '.github/workflows/deploy.yml'
+
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04-arm
+    environment: ${{ github.event.inputs.environment || 'test' }}
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      ENV: ${{ github.event.inputs.environment || 'test' }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+      ECR_REPO: spip-serverless
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read pinned SPIP version + ADOT layer
+        run: |
+          echo "SPIP_VERSION=$(cat spip/SPIP_VERSION)" >> "$GITHUB_ENV"
+          echo "ADOT_LAYER_ARN=arn:aws:lambda:${AWS_REGION}:901920570463:layer:aws-otel-collector-arm64-ver-0-115-0:1" >> "$GITHUB_ENV"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ vars.CI_ROLE_NAME || 'ci-github-actions' }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Restore ADOT collector from cache
+        id: adot-cache
+        uses: actions/cache@v4
+        with:
+          path: spip/overlay/adot-collector
+          key: adot-collector-${{ env.ADOT_LAYER_ARN }}
+
+      - name: Download ADOT collector
+        if: steps.adot-cache.outputs.cache-hit != 'true'
+        run: |
+          URL=$(aws lambda get-layer-version-by-arn --arn "$ADOT_LAYER_ARN" --query 'Content.Location' --output text)
+          curl -sL "$URL" -o /tmp/adot.zip
+          unzip -o /tmp/adot.zip extensions/collector -d /tmp/adot
+          mv /tmp/adot/extensions/collector spip/overlay/adot-collector
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push SPIP image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: spip/Dockerfile
+          platforms: linux/arm64
+          push: true
+          build-args: |
+            SPIP_VERSION=${{ env.SPIP_VERSION }}
+          tags: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:${{ github.sha }}
+          cache-from: type=registry,ref=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:cache
+          cache-to: type=registry,ref=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:cache,mode=max
+          provenance: false
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Deploy static stack
+        working-directory: iac/spip/static
+        run: |
+          terraform init -backend-config=var/${ENV}/backend.tfbackend -reconfigure
+          terraform apply -var-file=var/${ENV}/values.tfvars -auto-approve -no-color
+
+      - name: Sync static assets to S3
+        run: |
+          IMG=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${{ github.sha }}
+          docker pull "$IMG"
+          CID=$(docker create "$IMG")
+          rm -rf /tmp/spip-assets && mkdir -p /tmp/spip-assets
+          for d in squelettes-dist plugins-dist plugins prive; do docker cp "$CID:/var/task/$d" "/tmp/spip-assets/$d"; done
+          docker rm "$CID" > /dev/null
+          aws s3 sync /tmp/spip-assets/ "s3://spip-serverless-${ENV}-assets-${AWS_ACCOUNT_ID}/" --exclude "*.php"
+
+      - name: Deploy app stack
+        working-directory: iac/spip/app
+        run: |
+          terraform init -backend-config=var/${ENV}/backend.tfbackend -reconfigure
+          terraform apply -var-file=var/${ENV}/values.tfvars -var commit_id=${{ github.sha }} -auto-approve -no-color

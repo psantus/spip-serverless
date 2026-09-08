@@ -1,0 +1,15 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+exporters:
+  awsxray:
+    # Export to the function's own region (AWS_REGION). Hardcoding us-east-1 made
+    # test/prep/prod (eu-west-3) export cross-region on every flush → added latency.
+    region: ${env:AWS_REGION}
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [awsxray]

@@ -1,0 +1,12 @@
+<paquet
+	prefix="logs_stderr"
+	categorie="outil"
+	version="0.1.0"
+	etat="dev"
+	compatibilite="[4.2.0;4.*]"
+	logo="prive/themes/spip/images/logs_stderr-xx.svg"
+>
+	<nom>Logs vers STDERR</nom>
+	<auteur>Teddy P.</auteur>
+	<licence>GNU/GPL</licence>
+</paquet>

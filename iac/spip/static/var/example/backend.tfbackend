@@ -1,0 +1,5 @@
+region       = "eu-west-3"
+bucket       = "CHANGE_ME-terraform-state"
+key          = "spip-static/terraform.tfstate"
+encrypt      = true
+use_lockfile = true

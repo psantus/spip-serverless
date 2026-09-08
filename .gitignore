@@ -1,0 +1,24 @@
+# SPIP core — fetched at build time (see docs/spip-upgrade.md), never committed
+spip/src/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# Secrets / build artifacts
+**/cles.php
+spip/overlay/adot-collector
+__pycache__/
+
+# PHP dev-only
+spip/plugins/*/vendor/
+spip/plugins/*/.phpunit.result.cache

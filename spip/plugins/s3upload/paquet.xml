@@ -1,0 +1,12 @@
+<paquet
+    prefix="s3upload"
+    categorie="outil"
+    version="1.0.0"
+    etat="stable"
+    compatibilite="[4.0.0;4.4.*]"
+>
+    <nom>S3 Upload</nom>
+    <auteur>TerraCloud</auteur>
+    <licence>GPL</licence>
+    <pipeline nom="header_prive" inclure="s3upload_pipelines.php" />
+</paquet>
