@@ -1,5 +1,7 @@
 # OpenTelemetry Tracing (X-Ray)
 
+[Français](../fr/tracing.md) · **English**
+
 ## Architecture
 
 ```

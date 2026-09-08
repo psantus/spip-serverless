@@ -1,5 +1,7 @@
 # Aurora DSQL Driver
 
+[Français](../fr/dsql.md) · **English**
+
 ## Overview
 
 SPIP uses a custom PostgreSQL driver (`dsql.php`) to connect to Aurora DSQL. It's a fork of SPIP's experimental PostgreSQL driver (`ecrire/req/pg.exp.php`) with DSQL-specific adaptations.

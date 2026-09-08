@@ -1,5 +1,7 @@
 # Reset d'un mot de passe SPIP (SPIP-serverless / DSQL / Lambda)
 
+**Français** · [English](../en/spip-passwords.md)
+
 Procédure pour réinitialiser le mot de passe d'un auteur SPIP directement en base,
 quand l'accès à l'espace privé est perdu.
 

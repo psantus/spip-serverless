@@ -1,5 +1,7 @@
 # Upgrading SPIP core
 
+[Français](../fr/spip-upgrade.md) · **English**
+
 SPIP core is **not vendored** in this repo. It is fetched at build time from the official
 archive (`files.spip.net`) at a single pinned version. Upgrading SPIP is therefore just:
 **bump the pinned version, rebuild, test on a non-prod environment, promote.**
@@ -15,7 +17,7 @@ The image is **immutable and stateless**. Two clean halves:
 
 So: **all code/version changes are repo → build → deploy; all data/migration changes are
 runtime**, triggered by the first admin request (same cold-start mechanism as the initial
-plugin migrations — see `docs/db-bootstrap.md`). You never run a DB migration by hand for
+plugin migrations — see `docs/en/db-bootstrap.md`). You never run a DB migration by hand for
 an upgrade; you deploy the image and open the admin once.
 
 ## Where the version is pinned
@@ -45,7 +47,7 @@ It is consumed by:
    make deploy ENV=test
    ```
    Check the admin (`/ecrire`), a public page, and login.
-5. Commit and let CI promote (see `docs/environments.md`).
+5. Commit and let CI promote (see `docs/en/environments.md`).
 
 Our customisations live **outside** SPIP core, so a core upgrade never touches them:
 - `spip/overlay/**` — files that override core at build time (connect.php, mes_options*,
@@ -68,5 +70,5 @@ Riskier — core can add/remove files and change APIs:
 
 - The core upgrade does **not** replay SPIP's own DB migrations: if core bumps its
   `spip_version_base`, the SPIP upgrade runs on the first authenticated admin visit (same
-  cold-start mechanism as plugin migrations — see `docs/db-bootstrap.md`).
+  cold-start mechanism as plugin migrations — see `docs/en/db-bootstrap.md`).
 - Never commit a downloaded zip or `spip/src/` — both are git-ignored.
