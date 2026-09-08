@@ -45,10 +45,9 @@ et une image plus petite = cold start plus rapide et stockage moins cher. Le scr
   `LICENSE*`, `README*`, `tests/`, `docs/`, `examples/`).
 - Affiche la taille économisée (`AWS SDK: <avant>MB → <après>MB`).
 
-> Note : la liste blanche `KEEP_SERVICES` actuelle contient encore quelques services hérités
-> de l'application d'origine (`bedrock-*`, `translate`) que la plateforme nue n'utilise pas.
-> Réduis-la à `dsql, dynamodb, s3, ssm, sts, cloudfront, ses` pour une image plus légère, et
-> rajoute ce dont tes propres plugins ont besoin.
+> `KEEP_SERVICES` est réduit à ce que la plateforme utilise réellement : `dsql`, `dynamodb`,
+> `s3`, `ssm`, `sts` (chaîne de credentials) et `ses`/`email` (mail optionnel — voir
+> [email-ses.md](email-ses.md)). Ajoute le service dont tes propres plugins ont besoin.
 
 Pour ajouter un service SDK dont ton plugin a besoin : ajoute-le à `KEEP_SERVICES` (et à la
 liste `case` de `src/`) dans `spip/scripts/shrink-vendor.sh`, puis rebuild.

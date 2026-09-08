@@ -45,10 +45,9 @@ and cheaper storage. The script:
   `LICENSE*`, `README*`, `tests/`, `docs/`, `examples/`).
 - Prints the saved size (`AWS SDK: <before>MB → <after>MB`).
 
-> Note: the current `KEEP_SERVICES` allow-list still contains a few services inherited from
-> the original application (`bedrock-*`, `translate`) that the bare platform does not use.
-> Trim them to `dsql, dynamodb, s3, ssm, sts, cloudfront, ses` for a leaner image, and add
-> back whatever your own plugins need.
+> `KEEP_SERVICES` is trimmed to what the platform actually uses: `dsql`, `dynamodb`, `s3`,
+> `ssm`, `sts` (credential chain) and `ses`/`email` (optional mail — see
+> [email-ses.md](email-ses.md)). Add whatever service your own plugins need.
 
 To add an SDK service your plugin needs: add it to `KEEP_SERVICES` (and to the `src/`
 `case` allow-list) in `spip/scripts/shrink-vendor.sh`, then rebuild.

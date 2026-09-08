@@ -136,7 +136,8 @@ COPY spip/overlay/router.php /var/task/router.php
 # Our plugins (always active — placed in plugins-dist).
 COPY spip/plugins/s3upload/ /var/task/plugins-dist/s3upload/
 COPY spip/plugins/s3upload/exec/ /var/task/ecrire/exec/
-RUN rm -rf /var/task/plugins/s3upload /var/task/plugins/sessions_dynamodb
+COPY spip/plugins/ses_mail/ /var/task/plugins-dist/ses_mail/
+RUN rm -rf /var/task/plugins/s3upload /var/task/plugins/sessions_dynamodb /var/task/plugins/ses_mail
 
 # Third-party plugins (always active — in plugins-dist).
 COPY spip/plugins-vendor/ /var/task/plugins-dist/
