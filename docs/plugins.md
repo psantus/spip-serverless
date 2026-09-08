@@ -34,6 +34,25 @@ Everything placed under `plugins-dist/` is scanned and activated by SPIP on cold
 SVP registers it in the DB (`spip_paquets` with `actif='oui'`) and wires the
 `paquet.xml` pipeline declarations automatically.
 
+### `plugins/` vs `plugins-dist/` — why the distinction disappears at runtime
+
+In a **normal** SPIP install the two directories mean different things:
+
+- `plugins-dist/` — plugins **shipped with the SPIP core**, always active, no activation step.
+- `plugins/` — plugins **you added**, which must be **activated** (registered in the DB via
+  SVP, normally by clicking "activate" in the private area).
+
+That activation step is interactive and writes to disk — neither is possible on an
+**immutable, read-only Lambda** that scales to zero. So this build deliberately **copies our
+own plugins into `plugins-dist/`** (see the Dockerfile), where they are always active from
+the first cold start, with no manual step.
+
+Consequently, at **runtime** the `plugins/` vs `plugins-dist/` distinction no longer exists —
+everything lives in `/var/task/plugins-dist/`. In the **repo**, the separate source folders
+(`spip/plugins/` = ours, `spip/plugins-vendor/` = third-party) are kept only for
+organisation and provenance; there is no `spip/plugins-dist/` (that name belongs to the
+fetched SPIP core).
+
 ## Add a THIRD-PARTY plugin
 
 1. Download the plugin into `spip/plugins-vendor/<plugin-name>/` (it must have a valid
