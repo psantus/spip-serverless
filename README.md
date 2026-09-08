@@ -96,6 +96,7 @@ make run-local      # SPIP sur http://localhost:8080 (Apache)
 | Ajouter un plugin (tiers ou maison) | [docs/plugins.md](docs/fr/plugins.md) |
 | Mettre à jour le cœur SPIP | [docs/spip-upgrade.md](docs/fr/spip-upgrade.md) |
 | Build de l'image / dépendances Composer / shrink-vendor | [docs/build.md](docs/fr/build.md) |
+| Emails transactionnels via Amazon SES (optionnel) | [docs/email-ses.md](docs/fr/email-ses.md) |
 | Ajouter / configurer un environnement | [docs/environments.md](docs/fr/environments.md) |
 | Initialiser la base + l'admin | [docs/db-bootstrap.md](docs/fr/db-bootstrap.md) |
 | Réinitialiser un mot de passe admin | [docs/spip-passwords.md](docs/fr/spip-passwords.md) |
