@@ -14,6 +14,25 @@ if (!isset($_SERVER['DOCUMENT_ROOT'])) {
     $_SERVER['DOCUMENT_ROOT'] = '/var/task';
 }
 
+// ── 0b. Pin SPIP's public base URL (host + scheme) ─────────────────────────
+// Behind CloudFront + API Gateway the origin sees the execute-api host (CloudFront
+// strips the viewer Host so API Gateway accepts the request), so SPIP's url_de_base()
+// would build absolute URLs (login "converser", redirects, canonical, emails) on the
+// wrong host, without the stage path. Force the real public host/scheme here so every
+// absolute URL SPIP emits points at the CloudFront (or custom) domain.
+$publicUrl = getenv('SPIP_PUBLIC_URL');
+if ($publicUrl && ($p = parse_url($publicUrl)) && !empty($p['host'])) {
+    $_SERVER['HTTP_HOST']   = $p['host'] . (isset($p['port']) ? ':' . $p['port'] : '');
+    $_SERVER['SERVER_NAME'] = $p['host'];
+    if (($p['scheme'] ?? 'https') === 'https') {
+        $_SERVER['HTTPS']       = 'on';
+        $_SERVER['SERVER_PORT'] = '443';
+    }
+    unset($p);
+}
+unset($publicUrl);
+
+
 // ── 1. Create writable dirs ────────────────────────────────────────────────
 if (!is_dir('/tmp/spip/cache')) {
     @mkdir('/tmp/spip/cache/skel', 0777, true);

@@ -56,6 +56,10 @@ locals {
     CF_DISTRIBUTION_ID = aws_cloudfront_distribution.spip.id
     APP_NAME           = local.app_name
 
+    # Public base URL SPIP builds its absolute links from (see prepend.php). Uses the
+    # custom domain when set, else the CloudFront default domain.
+    SPIP_PUBLIC_URL = "https://${var.domain_name != "" ? var.domain_name : aws_cloudfront_distribution.spip.domain_name}"
+
     # When "1", the public SPIP site (skeletons) returns a 404 "off" page.
     # API/admin paths stay available.
     SPIP_PUBLIC_DISABLED = var.spip_public_disabled ? "1" : "0"

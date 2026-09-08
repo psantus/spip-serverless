@@ -34,8 +34,17 @@ Fill in:
 - the state S3 bucket in both `backend.tfbackend` files (create it once per account)
 - `static_state_bucket` / `static_state_region` in the app stack (point at the static
   stack's state)
-- optionally `domain_name` + `hosted_zone_name` for a custom domain (Route53 zone must
-  exist in the same account)
+- optionally `domain_name` + `hosted_zone_name` for a custom domain. Setting
+  `domain_name` (via Terraform, not the CloudFront console) drives everything from one
+  variable: the CloudFront alias, a us-east-1 ACM certificate (DNS-validated against the
+  `hosted_zone_name` Route53 zone, which must exist **in the same account**), the Route53
+  A-record, **and** the Lambda's `SPIP_PUBLIC_URL` (so SPIP builds its absolute links on
+  that domain). Leave both empty to use the default `*.cloudfront.net` domain.
+
+  > If you change `domain_name` on an already-bootstrapped environment, the runtime host
+  > (prepend.php / `SPIP_PUBLIC_URL`) follows automatically, but the stored `adresse_site`
+  > meta does not — re-run the bootstrap (or `UPDATE spip_meta SET valeur='https://<new>'
+  > WHERE nom='adresse_site'`). See `docs/db-bootstrap.md`.
 
 ## First bring-up (per environment)
 

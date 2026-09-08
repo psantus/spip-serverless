@@ -4,6 +4,20 @@ SPIP core is **not vendored** in this repo. It is fetched at build time from the
 archive (`files.spip.net`) at a single pinned version. Upgrading SPIP is therefore just:
 **bump the pinned version, rebuild, test on a non-prod environment, promote.**
 
+## Repo side vs online side (the mental model)
+
+The image is **immutable and stateless**. Two clean halves:
+
+| You change it in the REPO (→ build → deploy) | It happens ONLINE, automatically, in DSQL |
+|---|---|
+| SPIP version (`spip/SPIP_VERSION`), plugins, overlays, config | The SPIP/plugin **DB schema migration** replays on the **first authenticated `/ecrire` visit** after deploy (if `spip_version_base` bumped) — no manual DB step |
+| Rebuild the Docker image, `make deploy` / CI | Your **content** (articles, media, users) stays in DSQL, untouched by a deploy |
+
+So: **all code/version changes are repo → build → deploy; all data/migration changes are
+runtime**, triggered by the first admin request (same cold-start mechanism as the initial
+plugin migrations — see `docs/db-bootstrap.md`). You never run a DB migration by hand for
+an upgrade; you deploy the image and open the admin once.
+
 ## Where the version is pinned
 
 One source of truth: **`spip/SPIP_VERSION`** (e.g. `4.4.22`).
@@ -35,7 +49,7 @@ It is consumed by:
 
 Our customisations live **outside** SPIP core, so a core upgrade never touches them:
 - `spip/overlay/**` — files that override core at build time (connect.php, mes_options*,
-  install.php, dsql.php, SpipCles.php, prepend.php, router.php)
+  install.php, dsql.php, prepend.php, router.php)
 - `spip/plugins/**`, `spip/plugins-vendor/**` — our + third-party plugins
 - `spip/scripts/patch-documents.php` — the S3 patch applied to `ecrire/inc/documents.php`
 

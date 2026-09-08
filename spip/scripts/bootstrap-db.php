@@ -154,6 +154,20 @@ if (!$has_alea && function_exists('renouvelle_alea')) {
     _out('aleas', $has_alea ? 'already present' : 'renouvelle_alea unavailable');
 }
 
+// ── 2b. Site public URL (adresse_site meta) ──────────────────────────────────
+// The CLI install cannot infer the site's public URL (no HTTP host), so creer_base
+// leaves adresse_site as "http://" → SPIP emits "http:///" for logo/home/canonical
+// links and transactional emails. Take it from SPIP_PUBLIC_URL (same value the Lambda
+// forces as HTTP_HOST at runtime; see prepend.php).
+$publicUrl = rtrim((string) getenv('SPIP_PUBLIC_URL'), '/');
+if ($publicUrl !== '' && function_exists('ecrire_meta')) {
+    ecrire_meta('adresse_site', $publicUrl, 'non');
+    _out('adresse_site', $publicUrl);
+} else {
+    _out('adresse_site', 'skipped (SPIP_PUBLIC_URL unset)');
+}
+unset($publicUrl);
+
 // ── 3. Plugin install/upgrade (plugin tables + your plugin migrations) ────────────
 // Two steps, mirroring what the first authenticated visit to the private area does:
 //  a) actualise_plugins_actifs(): refresh the active-plugins list (meta 'plugin')
@@ -173,6 +187,10 @@ if (function_exists('lire_config') && lire_config('plugin_installes', null) === 
     _out('plugin_installes', 'seeded empty (SVP guard)');
 }
 if (function_exists('plugin_installes_meta')) {
+    // plugin_installes_meta() runs plugin install boxes that call template helpers
+    // like typo()/propre(); load them (not auto-loaded in this CLI context).
+    include_spip('inc/texte');
+    include_spip('inc/filtres');
     // plugin_installes_meta() may echo install boxes; capture and drop that output.
     ob_start();
     plugin_installes_meta();
