@@ -1,5 +1,7 @@
 # Cron (SPIP Job Queue)
 
+[Français](../fr/cron.md) · **English**
+
 ## Problem
 
 SPIP's job queue (`genie`) normally runs inline on every web request — it checks for pending jobs and executes them. On Lambda, this adds latency to every request and is unreliable (Lambda instances are ephemeral).

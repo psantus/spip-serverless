@@ -45,12 +45,11 @@ skeletons. Default region: **eu-west-3** (Paris) 🇫🇷.
 - An AWS account with permission to create the resources above (Aurora DSQL is available
   in eu-west-3 among others).
 - **Docker** installed and **running** (buildx; the image is `linux/arm64`).
-- **Terraform ≥ 1.14** (an older 1.5.x on your PATH will fail the `required_version` check).
+- **Terraform ≥ 1.14**.
 - **AWS CLI v2** with an **active session** for your profile — `aws sso login --profile <p>`
   or exported credentials. The principal must be able to create DSQL, S3, ECR, DynamoDB,
   SSM, Lambda, API Gateway, CloudFront and IAM roles.
 - **make**, `git`, `curl`, `unzip`.
-- Aurora DSQL, Bedrock etc. beyond the above are **not** used by the bare platform.
 
 ## Quick start
 
@@ -94,12 +93,12 @@ make run-local      # SPIP on http://localhost:8080 (Apache)
 
 | Task | Doc |
 |---|---|
-| Add a plugin (third-party or custom) | [docs/plugins.md](docs/plugins.md) |
-| Upgrade SPIP core | [docs/spip-upgrade.md](docs/spip-upgrade.md) |
-| Add / configure an environment | [docs/environments.md](docs/environments.md) |
-| Initialise the database + admin | [docs/db-bootstrap.md](docs/db-bootstrap.md) |
-| Reset an admin password | [docs/spip-passwords.md](docs/spip-passwords.md) |
-| DSQL, sessions, S3, secrets, tracing, logging, cron | `docs/*.md` |
+| Add a plugin (third-party or custom) | [docs/plugins.md](docs/en/plugins.md) |
+| Upgrade SPIP core | [docs/spip-upgrade.md](docs/en/spip-upgrade.md) |
+| Add / configure an environment | [docs/environments.md](docs/en/environments.md) |
+| Initialise the database + admin | [docs/db-bootstrap.md](docs/en/db-bootstrap.md) |
+| Reset an admin password | [docs/spip-passwords.md](docs/en/spip-passwords.md) |
+| DSQL, sessions, S3, secrets, tracing, logging, cron | `docs/en/*.md` |
 
 ## Security notes
 

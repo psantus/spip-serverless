@@ -1,5 +1,7 @@
 # Logging
 
+[Français](../fr/logging.md) · **English**
+
 ## Architecture
 
 SPIP logs → `logs_stderr` plugin → PHP `error_log()` → stderr → CloudWatch Logs

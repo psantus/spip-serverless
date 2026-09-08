@@ -1,5 +1,7 @@
 # Environments
 
+[Français](../fr/environments.md) · **English**
+
 An environment = one AWS account (or one account + region) running its own copy of the
 two Terraform stacks and the SPIP image. The default region is **eu-west-3** (Paris).
 
@@ -44,7 +46,7 @@ Fill in:
   > If you change `domain_name` on an already-bootstrapped environment, the runtime host
   > (prepend.php / `SPIP_PUBLIC_URL`) follows automatically, but the stored `adresse_site`
   > meta does not — re-run the bootstrap (or `UPDATE spip_meta SET valeur='https://<new>'
-  > WHERE nom='adresse_site'`). See `docs/db-bootstrap.md`.
+  > WHERE nom='adresse_site'`). See `docs/en/db-bootstrap.md`.
 
 ## First bring-up (per environment)
 
@@ -52,12 +54,12 @@ Fill in:
 # 1. static stack (DSQL, S3, ECR, DynamoDB, SSM)
 make deploy-static ENV=prod AWS_PROFILE=<profile>
 
-# 2. fill the SPIP key material placeholder in SSM (see docs/db-bootstrap.md)
+# 2. fill the SPIP key material placeholder in SSM (see docs/en/db-bootstrap.md)
 
 # 3. build + push image, sync assets, apply app stack
 make deploy ENV=prod AWS_PROFILE=<profile>
 
-# 4. initialise the SPIP schema + admin author (see docs/db-bootstrap.md)
+# 4. initialise the SPIP schema + admin author (see docs/en/db-bootstrap.md)
 ```
 
 ## CI/CD

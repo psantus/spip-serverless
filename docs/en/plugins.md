@@ -1,5 +1,7 @@
 # Managing SPIP plugins on Lambda
 
+[Français](../fr/plugins.md) · **English**
+
 SPIP runs as an **immutable Docker image** here. Plugins are baked into the image at
 build time — there is no runtime plugin installation. Adding a plugin therefore means:
 drop it in the repo, add a COPY in the Dockerfile if needed, rebuild, redeploy.
@@ -17,7 +19,7 @@ spip/
 ```
 
 SPIP core plugins (`plugins-dist/`) are **not** in this repo — they come from the SPIP
-core fetched at build time (see `docs/spip-upgrade.md`). A few of them are removed in the
+core fetched at build time (see `docs/en/spip-upgrade.md`). A few of them are removed in the
 Dockerfile (`bigup`, `forum`, `statistiques`, …) because they don't fit a serverless/
 read-mostly deployment.
 
@@ -92,7 +94,7 @@ fetched SPIP core).
 
 3. Data-model migrations go in `<prefix>_administrations.php` (SPIP's native schema
    versioning — `spip_<prefix>_metas`/`maj_tables`). They run on the first authenticated
-   admin visit, or via `spip/scripts/bootstrap-db.php` (see `docs/db-bootstrap.md`).
+   admin visit, or via `spip/scripts/bootstrap-db.php` (see `docs/en/db-bootstrap.md`).
 
 4. Rebuild + deploy.
 

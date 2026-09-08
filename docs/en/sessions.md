@@ -1,5 +1,7 @@
 # Sessions (DynamoDB)
 
+[Français](../fr/sessions.md) · **English**
+
 ## Problem
 
 SPIP stores sessions as PHP files in `tmp/sessions/`. On Lambda, `/tmp` is ephemeral and per-instance — sessions are lost on cold starts and not shared across instances.

@@ -45,12 +45,11 @@ plugins et vos squelettes. Région par défaut : **eu-west-3** (Paris) 🇫🇷.
 - Un compte AWS autorisé à créer les ressources ci-dessus (Aurora DSQL est disponible en
   eu-west-3, entre autres).
 - **Docker** installé et **démarré** (buildx ; l'image est `linux/arm64`).
-- **Terraform ≥ 1.14** (un vieux 1.5.x dans le PATH échoue sur le contrôle `required_version`).
+- **Terraform ≥ 1.14**.
 - **AWS CLI v2** avec une **session active** pour votre profil — `aws sso login --profile <p>`
   ou des credentials exportés. Le principal doit pouvoir créer DSQL, S3, ECR, DynamoDB, SSM,
   Lambda, API Gateway, CloudFront et des rôles IAM.
 - **make**, `git`, `curl`, `unzip`.
-- Au-delà, Aurora DSQL, Bedrock, etc. ne sont **pas** utilisés par la plateforme nue.
 
 ## Démarrage rapide
 
@@ -94,14 +93,14 @@ make run-local      # SPIP sur http://localhost:8080 (Apache)
 
 | Tâche | Doc |
 |---|---|
-| Ajouter un plugin (tiers ou maison) | [docs/plugins.md](docs/plugins.md) |
-| Mettre à jour le cœur SPIP | [docs/spip-upgrade.md](docs/spip-upgrade.md) |
-| Ajouter / configurer un environnement | [docs/environments.md](docs/environments.md) |
-| Initialiser la base + l'admin | [docs/db-bootstrap.md](docs/db-bootstrap.md) |
-| Réinitialiser un mot de passe admin | [docs/spip-passwords.md](docs/spip-passwords.md) |
-| DSQL, sessions, S3, secrets, tracing, logs, cron | `docs/*.md` |
+| Ajouter un plugin (tiers ou maison) | [docs/plugins.md](docs/fr/plugins.md) |
+| Mettre à jour le cœur SPIP | [docs/spip-upgrade.md](docs/fr/spip-upgrade.md) |
+| Ajouter / configurer un environnement | [docs/environments.md](docs/fr/environments.md) |
+| Initialiser la base + l'admin | [docs/db-bootstrap.md](docs/fr/db-bootstrap.md) |
+| Réinitialiser un mot de passe admin | [docs/spip-passwords.md](docs/fr/spip-passwords.md) |
+| DSQL, sessions, S3, secrets, tracing, logs, cron | `docs/fr/*.md` |
 
-> Les docs détaillées sous `docs/*.md` sont en anglais pour l'instant.
+> Les docs détaillées sous `docs/fr/*.md` sont en anglais pour l'instant.
 
 ## Notes de sécurité
 

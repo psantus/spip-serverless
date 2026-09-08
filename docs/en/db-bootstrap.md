@@ -1,5 +1,7 @@
 # Bootstrap the DSQL database for a new environment (SPIP)
 
+[Français](../fr/db-bootstrap.md) · **English**
+
 How to **initialise the SPIP schema** (the `spip_*` tables) on an empty Aurora DSQL
 cluster — once per environment (test / prep / prod).
 
@@ -22,7 +24,7 @@ across accounts, no web wizard, no need to undo the baked `connect.php`.
 3. `actualise_plugins_actifs()` + `plugin_installes_meta()` — runs each active plugin's
    `*_upgrade()` (your plugin migrations, plus any bundled ones)
 4. creates the admin author (`0minirezo`, webmestre) with a **peppered** hash via
-   `Spip\Chiffrer\Password::hacher` (see `docs/spip-passwords.md`)
+   `Spip\Chiffrer\Password::hacher` (see `docs/en/spip-passwords.md`)
 
 ## Run it (per environment)
 
@@ -88,8 +90,8 @@ status          done
 - `spip/scripts/bootstrap-db.php` — the CLI script
 - `spip/overlay/config/connect.php` — dynamic DSQL connection (IAM token)
 - `spip/overlay/php/prepend.php` — writes `cles.php` from `SPIP_CLES`, sets `_DIR_*`
-- `docs/spip-passwords.md` — peppered admin author hash
-- `docs/dsql.md` — psql connection to the cluster via IAM token
+- `docs/en/spip-passwords.md` — peppered admin author hash
+- `docs/en/dsql.md` — psql connection to the cluster via IAM token
 
 ## Technical notes (pitfalls solved)
 

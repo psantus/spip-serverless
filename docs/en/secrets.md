@@ -1,5 +1,7 @@
 # Secrets Management (SSM Parameter Store)
 
+[Français](../fr/secrets.md) · **English**
+
 ## Architecture
 
 ```

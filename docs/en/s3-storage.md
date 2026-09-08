@@ -1,5 +1,7 @@
 # S3 File Storage
 
+[Français](../fr/s3-storage.md) · **English**
+
 ## Problem
 
 SPIP stores uploaded files (images, documents) in `IMG/` on the local filesystem. On Lambda, the filesystem is read-only (except `/tmp` which is ephemeral). Files must be stored externally.
