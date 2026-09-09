@@ -10,6 +10,8 @@ scale-to-zero, facturation à l'usage.
 Ce dépôt est une **plateforme générique et réutilisable** — apportez votre contenu, vos
 plugins et vos squelettes. Région par défaut : **eu-west-3** (Paris) 🇫🇷.
 
+**Démo live :** [d3l8qij0w6ijg3.cloudfront.net](https://d3l8qij0w6ijg3.cloudfront.net) — un SPIP servi en serverless (le site dort à ~0 € et se réveille à la requête).
+
 ## Architecture
 
 ```

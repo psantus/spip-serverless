@@ -10,6 +10,8 @@ zero, pay per request.
 This repo is a **generic, reusable platform** — bring your own content, plugins and
 skeletons. Default region: **eu-west-3** (Paris) 🇫🇷.
 
+**Live demo:** [d3l8qij0w6ijg3.cloudfront.net](https://d3l8qij0w6ijg3.cloudfront.net) — a SPIP served serverless (idle ≈ €0, wakes on the first request).
+
 ## Architecture
 
 ```
